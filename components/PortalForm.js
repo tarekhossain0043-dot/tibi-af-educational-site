@@ -14,20 +14,22 @@ export default function PortalForm({
   }
 
   return (
-    <form className="portal-form" onSubmit={handleSubmit}>
-      <div className="portal-form-heading">
-        <span className="portal-form-icon">
+    <form className="text-ink" onSubmit={handleSubmit}>
+      <div className="flex items-center gap-[13px] border-b border-paper-line pb-5">
+        <span className="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-[5px] bg-maroon text-white">
           <i className="fas fa-clipboard-check" aria-hidden="true" />
         </span>
         <div>
-          <h2>প্রয়োজনীয় তথ্য দিন</h2>
-          <p>তারকা (*) চিহ্নিত ঘরগুলো পূরণ করা আবশ্যক</p>
+          <h2 className="font-serif text-[1.05rem]">প্রয়োজনীয় তথ্য দিন</h2>
+          <p className="mt-[3px] text-[0.75rem] text-ink-soft">
+            তারকা (*) চিহ্নিত ঘরগুলো পূরণ করা আবশ্যক
+          </p>
         </div>
       </div>
-      <div className="portal-fields">
+      <div className="grid grid-cols-1 gap-x-3.5 gap-y-4 py-5 sm:grid-cols-2 sm:gap-y-[17px]">
         {fields.map((field) => (
           <label
-            className={`portal-field ${field.type === "checkbox" ? "portal-checkbox" : ""} ${field.wide ? "portal-field-wide" : ""}`}
+            className={`flex min-w-0 flex-col gap-1.5 text-[0.82rem] font-semibold ${field.type === "checkbox" ? "flex-row items-start gap-[9px] font-medium sm:col-span-2" : ""} ${field.wide && field.type !== "checkbox" ? "sm:col-span-2" : ""}`}
             key={field.name}
           >
             {field.type === "checkbox" ? (
@@ -36,12 +38,13 @@ export default function PortalForm({
                   type="checkbox"
                   name={field.name}
                   required={field.required !== false}
+                  className="mt-0.5 h-[17px] w-[17px] shrink-0 accent-maroon"
                 />
                 <span>{field.label}</span>
               </>
             ) : (
               <>
-                <span className="portal-field-label">
+                <span>
                   {field.label}
                   {field.required !== false && <b> *</b>}
                 </span>
@@ -50,6 +53,7 @@ export default function PortalForm({
                     name={field.name}
                     required={field.required !== false}
                     defaultValue=""
+                    className="min-h-11 w-full rounded border border-[#d9d5ca] bg-white px-3 py-2.5 text-[0.85rem] font-normal text-ink outline-none transition focus:border-gold focus:ring-[3px] focus:ring-gold/15"
                   >
                     <option value="" disabled>
                       {field.placeholder || "নির্বাচন করুন"}
@@ -66,6 +70,7 @@ export default function PortalForm({
                     rows="4"
                     placeholder={field.placeholder}
                     required={field.required !== false}
+                    className="min-h-28 w-full resize-y rounded border border-[#d9d5ca] bg-white px-3 py-2.5 text-[0.85rem] font-normal text-ink outline-none transition placeholder:text-[#969ba1] focus:border-gold focus:ring-[3px] focus:ring-gold/15"
                   />
                 ) : (
                   <input
@@ -74,6 +79,7 @@ export default function PortalForm({
                     placeholder={field.placeholder}
                     autoComplete={field.autoComplete}
                     required={field.required !== false}
+                    className="min-h-11 w-full rounded border border-[#d9d5ca] bg-white px-3 py-2.5 text-[0.85rem] font-normal text-ink outline-none transition placeholder:text-[#969ba1] focus:border-gold focus:ring-[3px] focus:ring-gold/15"
                   />
                 )}
               </>
@@ -81,17 +87,23 @@ export default function PortalForm({
           </label>
         ))}
       </div>
-      <button className="portal-submit" type="submit">
+      <button
+        className="inline-flex min-h-11 w-full items-center justify-center gap-3 rounded bg-maroon px-[18px] text-[0.85rem] font-bold text-white transition hover:-translate-y-px hover:bg-maroon-deep focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-gold sm:w-auto"
+        type="submit"
+      >
         {submitLabel}
         <i className="fas fa-arrow-right" aria-hidden="true" />
       </button>
-      <p className="portal-form-note">
-        <i className="fas fa-lock" aria-hidden="true" />
+      <p className="mt-3.5 flex items-start gap-[7px] text-[0.73rem] leading-[1.5] text-ink-soft">
+        <i className="fas fa-lock mt-[3px] text-maroon" aria-hidden="true" />
         আপনার তথ্য এই ডেমো পেজে কোথাও পাঠানো হচ্ছে না।
       </p>
       {submitted && (
-        <p className="portal-form-status" role="status">
-          <i className="fas fa-circle-info" aria-hidden="true" />
+        <p
+          className="mt-[15px] flex items-start gap-[9px] border-l-[3px] border-gold bg-[#fbf1d9] p-3 text-[0.79rem] leading-[1.55] text-[#684d13]"
+          role="status"
+        >
+          <i className="fas fa-circle-info mt-[3px]" aria-hidden="true" />
           ফর্মটি প্রস্তুত, তবে অনলাইন সার্ভারের সঙ্গে সংযুক্ত না থাকায় তথ্য জমা
           বা যাচাই করা হয়নি।
         </p>
