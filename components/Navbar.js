@@ -2,11 +2,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LOGO, navLinks } from "@/lib/data";
+import { useSiteContent } from "@/components/SiteContentProvider";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const { LOGO, navLinks, siteCopy } = useSiteContent();
+  if (pathname.startsWith("/admin")) return null;
+
   return (
     <nav className="sticky top-0 z-[100] flex items-center justify-between border-b-2 border-gold bg-ink px-3 py-[9px] sm:px-[18px]">
       <Link
@@ -16,10 +19,10 @@ export default function Navbar() {
         <img src={LOGO} alt="Logo" className="h-10 w-auto sm:h-[46px]" />
         <div className="flex flex-col leading-[1.2]">
           <span className="text-[0.77rem] font-extrabold tracking-[0.04em] sm:text-[0.95rem]">
-            THE BRILLIANTS FOUNDATION
+            {siteCopy.brandName}
           </span>
           <span className="text-[0.6rem] tracking-[0.1em] text-gold-soft sm:text-[0.68rem]">
-            BOGURA | ESTD-2002
+            {siteCopy.brandSubtitle}
           </span>
         </div>
       </Link>
@@ -57,12 +60,12 @@ export default function Navbar() {
           </Link>
         ))}
         <Link
-          href="/login"
-          className={`rounded bg-gold px-3 py-2 text-[0.88rem] font-semibold text-ink no-underline transition-colors hover:bg-gold-soft ${pathname === "/login" ? "shadow-[inset_0_-2px_0_#16233d]" : ""}`}
-          aria-current={pathname === "/login" ? "page" : undefined}
+          href="/admin"
+          className={`rounded bg-gold px-3 py-2 text-[0.88rem] font-semibold text-ink no-underline transition-colors hover:bg-gold-soft ${pathname.startsWith("/admin") ? "shadow-[inset_0_-2px_0_#16233d]" : ""}`}
+          aria-current={pathname.startsWith("/admin") ? "page" : undefined}
           onClick={() => setOpen(false)}
         >
-          লগইন
+          অ্যাডমিন
         </Link>
       </div>
     </nav>

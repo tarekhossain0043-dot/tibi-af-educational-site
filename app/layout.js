@@ -1,6 +1,7 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { SiteContentProvider } from "@/components/SiteContentProvider";
 import { LOGO } from "@/lib/data";
 
 export const metadata = {
@@ -29,9 +30,11 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body className="flex min-h-screen flex-col overflow-x-hidden bg-paper font-sans text-ink antialiased">
-        <Navbar />
-        <main className="w-full flex-1">{children}</main>
-        <Footer />
+        <SiteContentProvider>
+          <Navbar />
+          <main className="w-full flex-1">{children}</main>
+          <Footer />
+        </SiteContentProvider>
       </body>
     </html>
   );

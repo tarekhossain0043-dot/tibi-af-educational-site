@@ -1,10 +1,11 @@
 "use client";
 import { useState } from "react";
 import Reveal from "./Reveal";
-import { leaders } from "@/lib/data";
+import { useSiteContent } from "@/components/SiteContentProvider";
 
 export default function Leaders() {
   const [openId, setOpenId] = useState(null);
+  const { leaders } = useSiteContent();
   return (
     <div className="mt-9 grid grid-cols-1 gap-[22px] sm:grid-cols-2">
       {leaders.map((l) => (

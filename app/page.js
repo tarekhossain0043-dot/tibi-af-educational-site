@@ -1,16 +1,22 @@
+"use client";
+
 import Link from "next/link";
 import Hero from "@/components/Hero";
 import Reveal from "@/components/Reveal";
 import Leaders from "@/components/Leaders";
-import {
-  notices,
-  importantDates,
-  stats,
-  gallery,
-  registrationOpen,
-} from "@/lib/data";
+import { useSiteContent } from "@/components/SiteContentProvider";
 
 export default function Home() {
+  const {
+    notices,
+    importantDates,
+    stats,
+    gallery,
+    registrationOpen,
+    siteCopy,
+    serviceCards,
+  } = useSiteContent();
+
   return (
     <>
       <Hero />
@@ -24,10 +30,10 @@ export default function Home() {
           <Reveal className="mb-[18px] flex flex-wrap items-center justify-between gap-4">
             <div>
               <span className="inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase text-maroon before:inline-block before:h-px before:w-[18px] before:bg-gold">
-                নোটিশ বোর্ড
+                {siteCopy.noticesEyebrow}
               </span>
               <h2 className="mt-1.5 font-serif text-[1.3rem] font-extrabold text-ink">
-                সর্বশেষ ঘোষণা
+                {siteCopy.noticesTitle}
               </h2>
             </div>
             <Link
@@ -71,72 +77,33 @@ export default function Home() {
       <section className="mx-auto w-full max-w-[1140px] px-4 py-[38px] sm:py-14">
         <Reveal className="mb-7 text-center">
           <span className="inline-flex items-center justify-center gap-2 text-[0.72rem] font-bold uppercase text-maroon before:inline-block before:h-px before:w-[18px] before:bg-gold">
-            বৃত্তি পরীক্ষা ২০২৬
+            {siteCopy.servicesEyebrow}
           </span>
           <h2 className="mt-2 font-serif text-[1.55rem] font-extrabold text-ink">
-            প্রয়োজনীয় সেবাসমূহ
+            {siteCopy.servicesTitle}
           </h2>
           <p className="mx-auto mt-1.5 max-w-[520px] text-[0.88rem] text-ink-soft">
-            আবেদন থেকে ফলাফল — পুরো প্রক্রিয়ার প্রতিটি ধাপ এক জায়গায়।
+            {siteCopy.servicesDescription}
           </p>
         </Reveal>
         <Reveal className="grid grid-cols-2 gap-3 md:grid-cols-4">
-          <Link
-            href="/apply"
-            className="group relative overflow-hidden rounded-lg border border-paper-line bg-white px-4 py-6 text-center text-ink no-underline transition hover:-translate-y-1 hover:border-transparent hover:shadow-[0_14px_28px_rgba(22,35,61,0.1)] before:absolute before:bottom-0 before:left-0 before:h-[3px] before:w-full before:origin-left before:scale-x-0 before:bg-gold before:transition-transform hover:before:scale-x-100"
-          >
-            <div className="mx-auto mb-3.5 flex h-[52px] w-[52px] items-center justify-center rounded-full bg-maroon text-xl text-white">
-              <i className="fas fa-pen-to-square" aria-hidden="true" />
-            </div>
-            <span className="block text-[0.82rem] font-bold sm:text-[0.88rem]">
-              রেজিস্ট্রেশন করুন
-            </span>
-            <small className="mt-1 block text-[0.68rem] font-medium text-ink-soft sm:text-[0.72rem]">
-              নতুন আবেদন জমা দিন
-            </small>
-          </Link>
-          <Link
-            href="/download-admit"
-            className="group relative overflow-hidden rounded-lg border border-paper-line bg-white px-4 py-6 text-center text-ink no-underline transition hover:-translate-y-1 hover:border-transparent hover:shadow-[0_14px_28px_rgba(22,35,61,0.1)] before:absolute before:bottom-0 before:left-0 before:h-[3px] before:w-full before:origin-left before:scale-x-0 before:bg-gold before:transition-transform hover:before:scale-x-100"
-          >
-            <div className="mx-auto mb-3.5 flex h-[52px] w-[52px] items-center justify-center rounded-full bg-maroon text-xl text-white">
-              <i className="fas fa-id-card" aria-hidden="true" />
-            </div>
-            <span className="block text-[0.82rem] font-bold sm:text-[0.88rem]">
-              এডমিট কার্ড
-            </span>
-            <small className="mt-1 block text-[0.68rem] font-medium text-ink-soft sm:text-[0.72rem]">
-              ডাউনলোড ও প্রিন্ট করুন
-            </small>
-          </Link>
-          <Link
-            href="/result-search"
-            className="group relative overflow-hidden rounded-lg border border-paper-line bg-white px-4 py-6 text-center text-ink no-underline transition hover:-translate-y-1 hover:border-transparent hover:shadow-[0_14px_28px_rgba(22,35,61,0.1)] before:absolute before:bottom-0 before:left-0 before:h-[3px] before:w-full before:origin-left before:scale-x-0 before:bg-gold before:transition-transform hover:before:scale-x-100"
-          >
-            <div className="mx-auto mb-3.5 flex h-[52px] w-[52px] items-center justify-center rounded-full bg-maroon text-xl text-white">
-              <i className="fas fa-award" aria-hidden="true" />
-            </div>
-            <span className="block text-[0.82rem] font-bold sm:text-[0.88rem]">
-              ফলাফল
-            </span>
-            <small className="mt-1 block text-[0.68rem] font-medium text-ink-soft sm:text-[0.72rem]">
-              রোল দিয়ে যাচাই করুন
-            </small>
-          </Link>
-          <Link
-            href="/notices"
-            className="group relative overflow-hidden rounded-lg border border-paper-line bg-white px-4 py-6 text-center text-ink no-underline transition hover:-translate-y-1 hover:border-transparent hover:shadow-[0_14px_28px_rgba(22,35,61,0.1)] before:absolute before:bottom-0 before:left-0 before:h-[3px] before:w-full before:origin-left before:scale-x-0 before:bg-gold before:transition-transform hover:before:scale-x-100"
-          >
-            <div className="mx-auto mb-3.5 flex h-[52px] w-[52px] items-center justify-center rounded-full bg-maroon text-xl text-white">
-              <i className="fas fa-bullhorn" aria-hidden="true" />
-            </div>
-            <span className="block text-[0.82rem] font-bold sm:text-[0.88rem]">
-              নোটিশ ও নিয়মাবলী
-            </span>
-            <small className="mt-1 block text-[0.68rem] font-medium text-ink-soft sm:text-[0.72rem]">
-              সব ঘোষণা দেখুন
-            </small>
-          </Link>
+          {serviceCards.map((card) => (
+            <Link
+              key={card.href}
+              href={card.href}
+              className="group relative overflow-hidden rounded-lg border border-paper-line bg-white px-4 py-6 text-center text-ink no-underline transition hover:-translate-y-1 hover:border-transparent hover:shadow-[0_14px_28px_rgba(22,35,61,0.1)] before:absolute before:bottom-0 before:left-0 before:h-[3px] before:w-full before:origin-left before:scale-x-0 before:bg-gold before:transition-transform hover:before:scale-x-100"
+            >
+              <div className="mx-auto mb-3.5 flex h-[52px] w-[52px] items-center justify-center rounded-full bg-maroon text-xl text-white">
+                <i className={`fas ${card.icon}`} aria-hidden="true" />
+              </div>
+              <span className="block text-[0.82rem] font-bold sm:text-[0.88rem]">
+                {card.title}
+              </span>
+              <small className="mt-1 block text-[0.68rem] font-medium text-ink-soft sm:text-[0.72rem]">
+                {card.description}
+              </small>
+            </Link>
+          ))}
         </Reveal>
       </section>
 
@@ -147,10 +114,10 @@ export default function Home() {
       >
         <Reveal className="mb-7">
           <span className="inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase text-maroon before:inline-block before:h-px before:w-[18px] before:bg-gold">
-            সময়সূচী
+            {siteCopy.datesEyebrow}
           </span>
           <h2 className="mt-2 font-serif text-[1.55rem] font-extrabold text-ink">
-            গুরুত্বপূর্ণ তারিখসমূহ
+            {siteCopy.datesTitle}
           </h2>
         </Reveal>
         <Reveal className="overflow-hidden rounded-lg border border-paper-line bg-white">
@@ -188,22 +155,19 @@ export default function Home() {
           <Reveal className="relative min-w-0 flex-1">
             <img
               className="block w-full rounded-lg object-cover"
-              src="https://i.ibb.co.com/Y7z60VHd/IMG-7695.jpg"
+              src={siteCopy.journeyImage}
               alt="TBF"
             />
           </Reveal>
           <Reveal className="min-w-0 flex-1">
             <span className="inline-flex items-center gap-2 text-[0.72rem] font-bold uppercase text-maroon before:inline-block before:h-px before:w-[18px] before:bg-gold">
-              আমাদের অভিযাত্রা
+              {siteCopy.journeyEyebrow}
             </span>
             <h2 className="mb-3.5 mt-2 font-serif text-2xl font-extrabold text-ink">
-              আমাদের গৌরবময় যাত্রা
+              {siteCopy.journeyTitle}
             </h2>
             <p className="text-[0.92rem] leading-[1.7] text-ink-soft">
-              দুই দশকেরও বেশি সময় ধরে দ্যা ব্রিলিয়ান্টস ফাউন্ডেশন মেধা বিকাশ,
-              শিক্ষার উৎকর্ষতা এবং ভবিষ্যৎ নেতৃত্ব তৈরিতে নিরলসভাবে কাজ করে
-              যাচ্ছে। প্রতি বছর হাজারো শিক্ষার্থীর অংশগ্রহণে আমাদের বৃত্তি
-              পরীক্ষা আজ একটি বিশ্বস্ত ও সম্মানজনক প্ল্যাটফর্মে পরিণত হয়েছে।
+              {siteCopy.journeyDescription}
             </p>
             <div className="mt-6 grid grid-cols-2 border-t border-paper-line">
               {stats.map((s, i) => (
@@ -228,10 +192,10 @@ export default function Home() {
       <section className="mx-auto w-full max-w-[1140px] px-4 py-[38px] sm:py-14">
         <Reveal className="mb-7 text-center">
           <span className="inline-flex items-center justify-center gap-2 text-[0.72rem] font-bold uppercase text-maroon before:inline-block before:h-px before:w-[18px] before:bg-gold">
-            স্মৃতিচারণ
+            {siteCopy.galleryEyebrow}
           </span>
           <h2 className="mt-2 font-serif text-[1.55rem] font-extrabold text-ink">
-            কার্যক্রমের স্থিরচিত্র
+            {siteCopy.galleryTitle}
           </h2>
         </Reveal>
         <Reveal className="grid grid-cols-2 gap-2.5 lg:flex lg:h-[380px]">
@@ -254,13 +218,13 @@ export default function Home() {
       <section className="mx-auto w-full max-w-[1140px] border-t border-paper-line px-4 py-[38px] sm:py-14">
         <Reveal className="mb-7 text-center">
           <span className="inline-flex items-center justify-center gap-2 text-[0.72rem] font-bold uppercase text-maroon before:inline-block before:h-px before:w-[18px] before:bg-gold">
-            নেতৃত্ব
+            {siteCopy.leadersEyebrow}
           </span>
           <h2 className="mt-2 font-serif text-[1.55rem] font-extrabold text-ink">
-            পরিচালনা পর্ষদ
+            {siteCopy.leadersTitle}
           </h2>
           <p className="mx-auto mt-1.5 max-w-[520px] text-[0.88rem] text-ink-soft">
-            টিবিএফ-এর অগ্রযাত্রায় যারা নেতৃত্ব দিচ্ছেন
+            {siteCopy.leadersDescription}
           </p>
         </Reveal>
         <Leaders />
@@ -271,10 +235,10 @@ export default function Home() {
         <div className="relative mx-auto flex w-full max-w-[1140px] flex-col items-center justify-between gap-[22px] px-4 text-center md:flex-row md:text-left">
           <div>
             <h3 className="mb-1.5 font-serif text-xl text-white">
-              আজই আপনার ভবিষ্যৎ গড়ার যাত্রা শুরু করুন
+              {siteCopy.ctaTitle}
             </h3>
             <p className="text-[0.88rem] text-white/60">
-              রোল ও মোবাইল নম্বর দিয়ে ফলাফল যাচাই করুন অথবা নতুন আবেদন জমা দিন।
+              {siteCopy.ctaDescription}
             </p>
           </div>
           <div className="flex flex-wrap justify-center gap-2.5">
@@ -283,14 +247,14 @@ export default function Home() {
                 href="/apply"
                 className="inline-flex items-center gap-2 rounded bg-gold px-6 py-3 text-[0.9rem] font-bold text-ink no-underline transition hover:-translate-y-0.5 hover:bg-gold-soft"
               >
-                আবেদন করুন
+                {siteCopy.heroApplyLabel}
               </Link>
             )}
             <Link
               href="/result-search"
               className="inline-flex items-center gap-2 rounded border border-white/45 px-6 py-3 text-[0.9rem] font-bold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/10"
             >
-              ফলাফল দেখুন
+              {siteCopy.resultButtonLabel}
             </Link>
           </div>
         </div>

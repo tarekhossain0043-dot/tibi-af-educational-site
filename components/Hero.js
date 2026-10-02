@@ -1,10 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { heroSlides, registrationOpen } from "@/lib/data";
+import { useSiteContent } from "@/components/SiteContentProvider";
 
 export default function Hero() {
   const [current, setCurrent] = useState(0);
+  const { heroSlides, registrationOpen, siteCopy } = useSiteContent();
 
   useEffect(() => {
     if (heroSlides.length < 2) return;
@@ -13,7 +14,11 @@ export default function Hero() {
       5000,
     );
     return () => clearInterval(t);
-  }, []);
+  }, [heroSlides.length]);
+
+  useEffect(() => {
+    setCurrent(0);
+  }, [heroSlides.length]);
 
   return (
     <section
@@ -31,16 +36,15 @@ export default function Hero() {
       <div className="relative z-[5] mx-auto flex h-full w-full max-w-[1140px] flex-col justify-center px-6 text-white">
         <div className="max-w-[620px] animate-hero-arrive">
           <span className="inline-flex items-center gap-2 text-[0.72rem] font-bold text-gold-soft before:inline-block before:h-px before:w-[18px] before:bg-gold-soft sm:text-[0.82rem]">
-            বগুড়ার শিক্ষা ও মেধা বিকাশে · ২০০২ থেকে
+            {siteCopy.heroEyebrow}
           </span>
           <h1 className="my-3.5 max-w-[670px] font-serif text-[1.9rem] font-black leading-[1.3] sm:text-[3.25rem]">
-            মেধার স্বীকৃতি,
+            {siteCopy.heroTitle}
             <br />
-            <span className="text-gold-soft">উজ্জ্বল আগামীর পথে</span>
+            <span className="text-gold-soft">{siteCopy.heroTitleAccent}</span>
           </h1>
           <p className="mb-6 max-w-[480px] text-[0.88rem] leading-[1.6] text-white/85 sm:text-[0.97rem]">
-            দ্যা ব্রিলিয়্যান্টস্ ফাউন্ডেশন বৃত্তি পরীক্ষার মাধ্যমে
-            শিক্ষার্থীদের মেধা, মনন ও সম্ভাবনাকে এগিয়ে নিতে কাজ করছে।
+            {siteCopy.heroDescription}
           </p>
           <div className="flex flex-wrap gap-2 sm:gap-3">
             {registrationOpen && (
@@ -48,7 +52,7 @@ export default function Hero() {
                 href="/apply"
                 className="inline-flex items-center gap-2 rounded border border-transparent bg-gold px-[18px] py-[11px] text-[0.85rem] font-bold text-ink no-underline transition hover:-translate-y-0.5 hover:bg-gold-soft hover:shadow-[0_10px_22px_rgba(184,146,58,0.3)] sm:px-6 sm:py-3 sm:text-[0.9rem]"
               >
-                বৃত্তির জন্য আবেদন{" "}
+                {siteCopy.heroApplyLabel}{" "}
                 <i className="fas fa-arrow-right" aria-hidden="true" />
               </Link>
             )}
@@ -56,17 +60,17 @@ export default function Hero() {
               href="#dates"
               className="inline-flex items-center gap-2 rounded border border-white/45 px-[18px] py-[11px] text-[0.85rem] font-bold text-white no-underline transition hover:-translate-y-0.5 hover:bg-white/10 sm:px-6 sm:py-3 sm:text-[0.9rem]"
             >
-              পরীক্ষার সময়সূচি
+              {siteCopy.heroDatesLabel}
             </a>
           </div>
           <div className="mt-5 flex flex-wrap gap-x-[18px] gap-y-2 text-[0.74rem] text-white/80 sm:mt-7 sm:text-[0.8rem]">
             <span className="inline-flex items-center gap-2">
-              <i className="fas fa-award" aria-hidden="true" /> বৃত্তি পরীক্ষা
-              ২০২৬
+              <i className="fas fa-award" aria-hidden="true" />{" "}
+              {siteCopy.heroBadge}
             </span>
             <span className="inline-flex items-center gap-2">
-              <i className="fas fa-location-dot" aria-hidden="true" /> বগুড়া,
-              বাংলাদেশ
+              <i className="fas fa-location-dot" aria-hidden="true" />{" "}
+              {siteCopy.heroLocation}
             </span>
           </div>
         </div>

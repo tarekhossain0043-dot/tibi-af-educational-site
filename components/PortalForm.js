@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { useSiteContent } from "@/components/SiteContentProvider";
 
 export default function PortalForm({
   fields,
   submitLabel = "তথ্য যাচাই করুন",
 }) {
   const [submitted, setSubmitted] = useState(false);
+  const { siteCopy } = useSiteContent();
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -20,9 +22,11 @@ export default function PortalForm({
           <i className="fas fa-clipboard-check" aria-hidden="true" />
         </span>
         <div>
-          <h2 className="font-serif text-[1.05rem]">প্রয়োজনীয় তথ্য দিন</h2>
+          <h2 className="font-serif text-[1.05rem]">
+            {siteCopy.portalFormHeading}
+          </h2>
           <p className="mt-[3px] text-[0.75rem] text-ink-soft">
-            তারকা (*) চিহ্নিত ঘরগুলো পূরণ করা আবশ্যক
+            {siteCopy.portalFormHelper}
           </p>
         </div>
       </div>
@@ -96,7 +100,7 @@ export default function PortalForm({
       </button>
       <p className="mt-3.5 flex items-start gap-[7px] text-[0.73rem] leading-[1.5] text-ink-soft">
         <i className="fas fa-lock mt-[3px] text-maroon" aria-hidden="true" />
-        আপনার তথ্য এই ডেমো পেজে কোথাও পাঠানো হচ্ছে না।
+        {siteCopy.portalPrivacyNote}
       </p>
       {submitted && (
         <p
@@ -104,8 +108,7 @@ export default function PortalForm({
           role="status"
         >
           <i className="fas fa-circle-info mt-[3px]" aria-hidden="true" />
-          ফর্মটি প্রস্তুত, তবে অনলাইন সার্ভারের সঙ্গে সংযুক্ত না থাকায় তথ্য জমা
-          বা যাচাই করা হয়নি।
+          {siteCopy.portalDemoMessage}
         </p>
       )}
     </form>
