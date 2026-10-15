@@ -8,6 +8,9 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const { LOGO, navLinks, siteCopy } = useSiteContent();
+  const visibleNavLinks = navLinks.some((link) => link.href === "/news")
+    ? navLinks
+    : [{ href: "/news", label: "সংবাদ" }, ...navLinks];
   if (pathname.startsWith("/admin")) return null;
 
   return (
@@ -48,7 +51,7 @@ export default function Navbar() {
       <div
         className={`${open ? "flex" : "hidden"} absolute left-0 right-0 top-full flex-col items-stretch gap-1 border-b-2 border-gold bg-ink px-4 pb-4 pt-2 min-[1120px]:static min-[1120px]:flex min-[1120px]:flex-row min-[1120px]:items-center min-[1120px]:gap-1 min-[1120px]:border-0 min-[1120px]:bg-transparent min-[1120px]:p-0`}
       >
-        {navLinks.map((link) => (
+        {visibleNavLinks.map((link) => (
           <Link
             key={link.href}
             href={link.href}
