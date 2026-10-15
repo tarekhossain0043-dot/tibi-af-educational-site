@@ -4,7 +4,14 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
-const categories = ["সর্বশেষ", "জাতীয়", "শিক্ষা", "বগুড়া", "প্রযুক্তি", "খেলাধুলা"];
+const categories = [
+  "সর্বশেষ",
+  "জাতীয়",
+  "শিক্ষা",
+  "বগুড়া",
+  "প্রযুক্তি",
+  "খেলাধুলা",
+];
 
 const articles = [
   {
@@ -160,8 +167,51 @@ function AdCard({ compact = false, onClick }) {
   );
 }
 
-function NewsArticleDetail({ article, onSave, onShare, saved, toast, setToast }) {
-  const relatedArticles = articles.filter((item) => item.id !== article.id).slice(0, 3);
+function AutoNewsPopup({ visible }) {
+  return (
+    <div
+      aria-live="polite"
+      className={`pointer-events-none fixed bottom-5 right-4 z-[150] transition-all duration-300 sm:right-6 ${visible ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"}`}
+      role="status"
+      aria-hidden={!visible}
+    >
+      <Link
+        className="pointer-events-auto flex max-w-[calc(100vw-2rem)] items-center gap-3 rounded-xl border border-paper-line bg-white p-3 text-ink no-underline shadow-[0_12px_35px_rgba(22,35,61,0.2)] sm:max-w-[320px] sm:p-4"
+        href="/news"
+        tabIndex={visible ? 0 : -1}
+      >
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-maroon text-white">
+          <i className="fas fa-newspaper" aria-hidden="true" />
+        </span>
+        <span>
+          <span className="block text-[0.68rem] font-bold text-maroon">
+            সংবাদ সকাল
+          </span>
+          <span className="mt-0.5 block text-[0.8rem] font-bold">
+            সর্বশেষ খবর পড়ুন
+          </span>
+        </span>
+        <i
+          className="fas fa-arrow-right ml-1 text-sm text-maroon"
+          aria-hidden="true"
+        />
+      </Link>
+    </div>
+  );
+}
+
+function NewsArticleDetail({
+  article,
+  onSave,
+  onShare,
+  saved,
+  toast,
+  setToast,
+  autoPopup,
+}) {
+  const relatedArticles = articles
+    .filter((item) => item.id !== article.id)
+    .slice(0, 3);
 
   return (
     <div className="min-h-screen bg-[#fbfaf7] text-ink">
@@ -172,8 +222,12 @@ function NewsArticleDetail({ article, onSave, onShare, saved, toast, setToast })
               <i className="fas fa-newspaper" aria-hidden="true" />
             </span>
             <span>
-              <span className="block font-serif text-xl font-black leading-none text-ink">সংবাদ সকাল</span>
-              <span className="mt-1 block text-[0.68rem] text-ink-soft">সত্যের খোঁজে, মানুষের পাশে</span>
+              <span className="block font-serif text-xl font-black leading-none text-ink">
+                সংবাদ সকাল
+              </span>
+              <span className="mt-1 block text-[0.68rem] text-ink-soft">
+                সত্যের খোঁজে, মানুষের পাশে
+              </span>
             </span>
           </Link>
           <Link
@@ -187,9 +241,20 @@ function NewsArticleDetail({ article, onSave, onShare, saved, toast, setToast })
       </header>
 
       <main className="mx-auto max-w-[1000px] px-4 py-6 sm:px-6 sm:py-9">
-        <nav aria-label="Breadcrumb" className="mb-5 text-[0.75rem] text-ink-soft">
-          <Link className="text-maroon no-underline hover:underline" href="/news">সংবাদ</Link>
-          <i className="fas fa-chevron-right mx-2 text-[0.6rem]" aria-hidden="true" />
+        <nav
+          aria-label="Breadcrumb"
+          className="mb-5 text-[0.75rem] text-ink-soft"
+        >
+          <Link
+            className="text-maroon no-underline hover:underline"
+            href="/news"
+          >
+            সংবাদ
+          </Link>
+          <i
+            className="fas fa-chevron-right mx-2 text-[0.6rem]"
+            aria-hidden="true"
+          />
           <span>{article.category}</span>
         </nav>
 
@@ -210,9 +275,27 @@ function NewsArticleDetail({ article, onSave, onShare, saved, toast, setToast })
               {article.summary}
             </p>
             <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 border-y border-paper-line py-3 text-[0.76rem] text-ink-soft">
-              <span><i className="far fa-user mr-1.5 text-maroon" aria-hidden="true" />{article.author}</span>
-              <time><i className="far fa-calendar mr-1.5 text-maroon" aria-hidden="true" />{article.date}</time>
-              <span><i className="far fa-clock mr-1.5 text-maroon" aria-hidden="true" />{article.time}</span>
+              <span>
+                <i
+                  className="far fa-user mr-1.5 text-maroon"
+                  aria-hidden="true"
+                />
+                {article.author}
+              </span>
+              <time>
+                <i
+                  className="far fa-calendar mr-1.5 text-maroon"
+                  aria-hidden="true"
+                />
+                {article.date}
+              </time>
+              <span>
+                <i
+                  className="far fa-clock mr-1.5 text-maroon"
+                  aria-hidden="true"
+                />
+                {article.time}
+              </span>
               <span className="sm:ml-auto">পড়তে {article.readTime}</span>
             </div>
             <div className="my-6 flex flex-wrap gap-2">
@@ -234,10 +317,15 @@ function NewsArticleDetail({ article, onSave, onShare, saved, toast, setToast })
               </button>
             </div>
             <div className="space-y-5 text-[0.95rem] leading-[1.95] text-ink-soft sm:text-[1rem]">
-              {article.body.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+              {article.body.map((paragraph) => (
+                <p key={paragraph}>{paragraph}</p>
+              ))}
             </div>
             <div className="mt-8 border-t border-paper-line pt-4 text-[0.76rem] text-ink-soft">
-              <i className="fas fa-pen-nib mr-2 text-maroon" aria-hidden="true" />
+              <i
+                className="fas fa-pen-nib mr-2 text-maroon"
+                aria-hidden="true"
+              />
               প্রতিবেদক: {article.author}
             </div>
           </div>
@@ -246,8 +334,12 @@ function NewsArticleDetail({ article, onSave, onShare, saved, toast, setToast })
         <section className="mt-8" aria-label="আরও খবর">
           <div className="mb-4 flex items-center justify-between border-b border-paper-line pb-3">
             <h2 className="font-serif text-xl font-extrabold">আরও খবর পড়ুন</h2>
-            <Link className="text-[0.78rem] font-bold text-maroon no-underline hover:text-ink" href="/news">
-              সব খবর <i className="fas fa-arrow-right ml-1" aria-hidden="true" />
+            <Link
+              className="text-[0.78rem] font-bold text-maroon no-underline hover:text-ink"
+              href="/news"
+            >
+              সব খবর{" "}
+              <i className="fas fa-arrow-right ml-1" aria-hidden="true" />
             </Link>
           </div>
           <div className="grid gap-3 sm:grid-cols-3">
@@ -257,9 +349,15 @@ function NewsArticleDetail({ article, onSave, onShare, saved, toast, setToast })
                 href={`/news/${related.id}`}
                 key={related.id}
               >
-                <span className="text-[0.68rem] font-bold text-maroon">{related.category}</span>
-                <span className="mt-2 block font-serif text-[0.95rem] font-bold leading-snug">{related.title}</span>
-                <span className="mt-3 block text-[0.72rem] text-ink-soft">{related.date}</span>
+                <span className="text-[0.68rem] font-bold text-maroon">
+                  {related.category}
+                </span>
+                <span className="mt-2 block font-serif text-[0.95rem] font-bold leading-snug">
+                  {related.title}
+                </span>
+                <span className="mt-3 block text-[0.72rem] text-ink-soft">
+                  {related.date}
+                </span>
               </Link>
             ))}
           </div>
@@ -269,19 +367,34 @@ function NewsArticleDetail({ article, onSave, onShare, saved, toast, setToast })
       <footer className="border-t border-paper-line bg-white">
         <div className="mx-auto flex max-w-[1000px] flex-wrap justify-between gap-2 px-4 py-5 text-[0.72rem] text-ink-soft sm:px-6">
           <span>© ২০২৬ সংবাদ সকাল · এটি নমুনা সংবাদ পোর্টাল</span>
-          <Link className="font-semibold text-maroon no-underline hover:text-ink" href="/">মূল ওয়েবসাইটে ফিরুন</Link>
+          <Link
+            className="font-semibold text-maroon no-underline hover:text-ink"
+            href="/"
+          >
+            মূল ওয়েবসাইটে ফিরুন
+          </Link>
         </div>
       </footer>
 
       {toast && (
-        <div aria-live="polite" className="fixed bottom-5 left-1/2 z-[250] flex max-w-[calc(100%-2rem)] -translate-x-1/2 items-center gap-2 rounded-lg bg-ink px-4 py-3 text-[0.82rem] font-semibold text-white shadow-xl" role="status">
+        <div
+          aria-live="polite"
+          className="fixed bottom-5 left-1/2 z-[250] flex max-w-[calc(100%-2rem)] -translate-x-1/2 items-center gap-2 rounded-lg bg-ink px-4 py-3 text-[0.82rem] font-semibold text-white shadow-xl"
+          role="status"
+        >
           <i className="fas fa-circle-info text-gold-soft" aria-hidden="true" />
           {toast}
-          <button aria-label="বার্তা বন্ধ করুন" className="ml-2 text-white/70 hover:text-white" onClick={() => setToast("")} type="button">
+          <button
+            aria-label="বার্তা বন্ধ করুন"
+            className="ml-2 text-white/70 hover:text-white"
+            onClick={() => setToast("")}
+            type="button"
+          >
             <i className="fas fa-xmark" aria-hidden="true" />
           </button>
         </div>
       )}
+      <AutoNewsPopup visible={autoPopup} />
     </div>
   );
 }
@@ -296,6 +409,7 @@ export default function NewsPortal() {
   const [toast, setToast] = useState("");
   const [email, setEmail] = useState("");
   const [today, setToday] = useState("");
+  const [autoPopup, setAutoPopup] = useState(false);
 
   useEffect(() => {
     setToday(
@@ -307,6 +421,27 @@ export default function NewsPortal() {
         year: "numeric",
       }).format(new Date()),
     );
+  }, []);
+
+  useEffect(() => {
+    let showTimer;
+    let hideTimer;
+
+    function schedulePopup(delay) {
+      showTimer = window.setTimeout(() => {
+        setAutoPopup(true);
+        hideTimer = window.setTimeout(() => {
+          setAutoPopup(false);
+          schedulePopup(3500);
+        }, 2000);
+      }, delay);
+    }
+
+    schedulePopup(5000);
+    return () => {
+      window.clearTimeout(showTimer);
+      window.clearTimeout(hideTimer);
+    };
   }, []);
 
   useEffect(() => {
@@ -351,8 +486,15 @@ export default function NewsPortal() {
       : [...savedIds, article.id];
     setSavedIds(nextSavedIds);
     try {
-      window.localStorage.setItem("tbf-news-saved", JSON.stringify(nextSavedIds));
-      setToast(isSaved ? "সংরক্ষিত খবর থেকে সরানো হয়েছে।" : "খবরটি সংরক্ষণ করা হয়েছে।");
+      window.localStorage.setItem(
+        "tbf-news-saved",
+        JSON.stringify(nextSavedIds),
+      );
+      setToast(
+        isSaved
+          ? "সংরক্ষিত খবর থেকে সরানো হয়েছে।"
+          : "খবরটি সংরক্ষণ করা হয়েছে।",
+      );
     } catch {
       setToast("বুকমার্ক সংরক্ষণ করা যায়নি। আবার চেষ্টা করুন।");
     }
@@ -394,14 +536,26 @@ export default function NewsPortal() {
   }
 
   if (params?.id) {
-    const article = articles.find((item) => String(item.id) === String(params.id));
+    const article = articles.find(
+      (item) => String(item.id) === String(params.id),
+    );
     if (!article) {
       return (
         <main className="flex min-h-screen flex-col items-center justify-center bg-[#fbfaf7] px-4 text-center text-ink">
-          <i className="far fa-newspaper text-4xl text-gold" aria-hidden="true" />
-          <h1 className="mt-4 font-serif text-2xl font-extrabold">খবরটি পাওয়া যায়নি</h1>
-          <p className="mt-2 text-sm text-ink-soft">এই সংবাদটি হয়তো সরিয়ে ফেলা হয়েছে।</p>
-          <Link className="mt-5 rounded bg-maroon px-4 py-2.5 text-sm font-bold text-white no-underline" href="/news">
+          <i
+            className="far fa-newspaper text-4xl text-gold"
+            aria-hidden="true"
+          />
+          <h1 className="mt-4 font-serif text-2xl font-extrabold">
+            খবরটি পাওয়া যায়নি
+          </h1>
+          <p className="mt-2 text-sm text-ink-soft">
+            এই সংবাদটি হয়তো সরিয়ে ফেলা হয়েছে।
+          </p>
+          <Link
+            className="mt-5 rounded bg-maroon px-4 py-2.5 text-sm font-bold text-white no-underline"
+            href="/news"
+          >
             সব খবরে ফিরে যান
           </Link>
         </main>
@@ -415,6 +569,7 @@ export default function NewsPortal() {
         saved={savedIds.includes(article.id)}
         toast={toast}
         setToast={setToast}
+        autoPopup={autoPopup}
       />
     );
   }
@@ -428,7 +583,10 @@ export default function NewsPortal() {
             {today}
           </p>
           <p className="hidden items-center gap-2 sm:flex">
-            <i className="fas fa-location-dot text-gold-soft" aria-hidden="true" />
+            <i
+              className="fas fa-location-dot text-gold-soft"
+              aria-hidden="true"
+            />
             বগুড়া, বাংলাদেশ
           </p>
         </div>
@@ -458,7 +616,10 @@ export default function NewsPortal() {
               মূল সাইট
             </a>
             <label className="flex min-w-0 flex-1 items-center gap-2 rounded-full border border-paper-line bg-[#fbfaf7] px-4 sm:w-[260px] sm:flex-none">
-              <i className="fas fa-magnifying-glass text-[0.8rem] text-ink-soft" aria-hidden="true" />
+              <i
+                className="fas fa-magnifying-glass text-[0.8rem] text-ink-soft"
+                aria-hidden="true"
+              />
               <span className="sr-only">খবর খুঁজুন</span>
               <input
                 className="h-10 w-full min-w-0 bg-transparent text-[0.82rem] outline-none placeholder:text-ink-soft/70"
@@ -487,7 +648,10 @@ export default function NewsPortal() {
         </div>
       </header>
 
-      <nav className="border-b border-paper-line bg-white" aria-label="সংবাদ বিভাগ">
+      <nav
+        className="border-b border-paper-line bg-white"
+        aria-label="সংবাদ বিভাগ"
+      >
         <div className="mx-auto flex max-w-[1180px] gap-1 overflow-x-auto px-4 sm:px-6">
           {categories.map((category) => (
             <button
@@ -509,9 +673,13 @@ export default function NewsPortal() {
             ব্রেকিং
           </span>
           <p className="truncate text-[0.8rem] font-medium">
-            শিক্ষার্থীদের জন্য নতুন শিক্ষাক্রমে হাতে-কলমে শেখায় গুরুত্ব দিচ্ছে শিক্ষা সংশ্লিষ্টরা
+            শিক্ষার্থীদের জন্য নতুন শিক্ষাক্রমে হাতে-কলমে শেখায় গুরুত্ব দিচ্ছে
+            শিক্ষা সংশ্লিষ্টরা
           </p>
-          <i className="fas fa-bolt ml-auto hidden text-gold-soft sm:block" aria-hidden="true" />
+          <i
+            className="fas fa-bolt ml-auto hidden text-gold-soft sm:block"
+            aria-hidden="true"
+          />
         </div>
       </div>
 
@@ -530,9 +698,18 @@ export default function NewsPortal() {
           </span>
         </div>
 
-        <AdCard onClick={() => setToast("এটি একটি নমুনা বিজ্ঞাপন—বিজ্ঞাপনদাতার সাইট যুক্ত করা হয়নি।")} />
+        <AdCard
+          onClick={() =>
+            setToast(
+              "এটি একটি নমুনা বিজ্ঞাপন—বিজ্ঞাপনদাতার সাইট যুক্ত করা হয়নি।",
+            )
+          }
+        />
 
-        <section className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]" aria-label="প্রধান সংবাদ">
+        <section
+          className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]"
+          aria-label="প্রধান সংবাদ"
+        >
           <article className="group relative overflow-hidden rounded-xl bg-ink">
             <Link
               aria-label={`${featuredArticle.title} পড়ুন`}
@@ -552,21 +729,31 @@ export default function NewsPortal() {
                 প্রধান সংবাদ · {featuredArticle.category}
               </span>
               <h2 className="pointer-events-auto max-w-[700px] font-serif text-[1.55rem] font-extrabold leading-snug sm:text-[2.15rem]">
-                <Link className="text-white no-underline hover:text-gold-soft" href={`/news/${featuredArticle.id}`}>
-                {featuredArticle.title}
+                <Link
+                  className="text-white no-underline hover:text-gold-soft"
+                  href={`/news/${featuredArticle.id}`}
+                >
+                  {featuredArticle.title}
                 </Link>
               </h2>
               <p className="mt-3 max-w-[650px] text-[0.85rem] leading-relaxed text-white/85 sm:text-[0.95rem]">
                 {featuredArticle.summary}
               </p>
               <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-3 text-[0.72rem] text-white/80">
-                <span><i className="far fa-user mr-1.5" aria-hidden="true" />{featuredArticle.author}</span>
-                <span><i className="far fa-clock mr-1.5" aria-hidden="true" />{featuredArticle.time}</span>
+                <span>
+                  <i className="far fa-user mr-1.5" aria-hidden="true" />
+                  {featuredArticle.author}
+                </span>
+                <span>
+                  <i className="far fa-clock mr-1.5" aria-hidden="true" />
+                  {featuredArticle.time}
+                </span>
                 <Link
                   className="pointer-events-auto ml-auto inline-flex items-center gap-2 rounded bg-white px-3.5 py-2 font-bold text-ink no-underline transition hover:bg-gold"
                   href={`/news/${featuredArticle.id}`}
                 >
-                  পুরো খবর পড়ুন <i className="fas fa-arrow-right" aria-hidden="true" />
+                  পুরো খবর পড়ুন{" "}
+                  <i className="fas fa-arrow-right" aria-hidden="true" />
                 </Link>
               </div>
             </div>
@@ -575,8 +762,13 @@ export default function NewsPortal() {
           <aside className="flex flex-col gap-5">
             <section className="rounded-xl border border-paper-line bg-white p-5">
               <div className="mb-4 flex items-center justify-between border-b border-paper-line pb-3">
-                <h2 className="font-serif text-[1.05rem] font-extrabold">জনপ্রিয় খবর</h2>
-                <i className="fas fa-chart-line text-maroon" aria-hidden="true" />
+                <h2 className="font-serif text-[1.05rem] font-extrabold">
+                  জনপ্রিয় খবর
+                </h2>
+                <i
+                  className="fas fa-chart-line text-maroon"
+                  aria-hidden="true"
+                />
               </div>
               <ol className="space-y-4">
                 {trendingStories.map((story, index) => (
@@ -584,12 +776,21 @@ export default function NewsPortal() {
                     <span className="font-serif text-[1.45rem] font-black leading-none text-gold">
                       {(index + 1).toLocaleString("bn-BD")}
                     </span>
-                    <p className="text-[0.82rem] font-semibold leading-relaxed text-ink">{story}</p>
+                    <p className="text-[0.82rem] font-semibold leading-relaxed text-ink">
+                      {story}
+                    </p>
                   </li>
                 ))}
               </ol>
             </section>
-            <AdCard compact onClick={() => setToast("এটি একটি নমুনা বিজ্ঞাপন—বিজ্ঞাপনদাতার সাইট যুক্ত করা হয়নি।")} />
+            <AdCard
+              compact
+              onClick={() =>
+                setToast(
+                  "এটি একটি নমুনা বিজ্ঞাপন—বিজ্ঞাপনদাতার সাইট যুক্ত করা হয়নি।",
+                )
+              }
+            />
           </aside>
         </section>
 
@@ -601,7 +802,11 @@ export default function NewsPortal() {
                   {showSaved ? "আপনার তালিকা" : "নিউজ ডেস্ক"}
                 </span>
                 <h2 className="mt-1 font-serif text-[1.3rem] font-extrabold">
-                  {showSaved ? "সংরক্ষিত খবর" : activeCategory === "সর্বশেষ" ? "সর্বশেষ সংবাদ" : `${activeCategory} সংবাদ`}
+                  {showSaved
+                    ? "সংরক্ষিত খবর"
+                    : activeCategory === "সর্বশেষ"
+                      ? "সর্বশেষ সংবাদ"
+                      : `${activeCategory} সংবাদ`}
                 </h2>
               </div>
               <span className="text-[0.73rem] text-ink-soft" aria-live="polite">
@@ -634,7 +839,9 @@ export default function NewsPortal() {
                         <span className="rounded bg-[#f5eee0] px-2 py-1 text-[0.65rem] font-bold text-maroon">
                           {article.category}
                         </span>
-                        <time className="text-[0.67rem] text-ink-soft">{article.date}</time>
+                        <time className="text-[0.67rem] text-ink-soft">
+                          {article.date}
+                        </time>
                       </div>
                       <Link
                         className="mt-3 block text-left font-serif text-[1.03rem] font-bold leading-snug text-ink no-underline hover:text-maroon"
@@ -650,11 +857,19 @@ export default function NewsPortal() {
                           className="text-[0.75rem] font-bold text-maroon no-underline hover:text-ink"
                           href={`/news/${article.id}`}
                         >
-                          বিস্তারিত <i className="fas fa-arrow-right ml-1" aria-hidden="true" />
+                          বিস্তারিত{" "}
+                          <i
+                            className="fas fa-arrow-right ml-1"
+                            aria-hidden="true"
+                          />
                         </Link>
                         <div className="flex gap-1">
                           <button
-                            aria-label={savedIds.includes(article.id) ? "সংরক্ষণ থেকে সরান" : "খবর সংরক্ষণ করুন"}
+                            aria-label={
+                              savedIds.includes(article.id)
+                                ? "সংরক্ষণ থেকে সরান"
+                                : "খবর সংরক্ষণ করুন"
+                            }
                             className={`flex h-8 w-8 items-center justify-center rounded-full transition ${savedIds.includes(article.id) ? "bg-maroon text-white" : "text-ink-soft hover:bg-[#f5eee0] hover:text-maroon"}`}
                             onClick={() => toggleSaved(article)}
                             type="button"
@@ -667,7 +882,10 @@ export default function NewsPortal() {
                             onClick={() => shareArticle(article)}
                             type="button"
                           >
-                            <i className="fas fa-share-nodes" aria-hidden="true" />
+                            <i
+                              className="fas fa-share-nodes"
+                              aria-hidden="true"
+                            />
                           </button>
                         </div>
                       </div>
@@ -677,10 +895,17 @@ export default function NewsPortal() {
               </div>
             ) : (
               <div className="rounded-xl border border-dashed border-paper-line bg-white px-5 py-12 text-center">
-                <i className="far fa-newspaper text-3xl text-gold" aria-hidden="true" />
-                <h3 className="mt-3 font-serif text-lg font-bold">কোনো খবর পাওয়া যায়নি</h3>
+                <i
+                  className="far fa-newspaper text-3xl text-gold"
+                  aria-hidden="true"
+                />
+                <h3 className="mt-3 font-serif text-lg font-bold">
+                  কোনো খবর পাওয়া যায়নি
+                </h3>
                 <p className="mt-1 text-sm text-ink-soft">
-                  {showSaved ? "খবর সংরক্ষণ করলে এখানে দেখতে পাবেন।" : "অন্য শব্দ দিয়ে খুঁজুন বা অন্য বিভাগ নির্বাচন করুন।"}
+                  {showSaved
+                    ? "খবর সংরক্ষণ করলে এখানে দেখতে পাবেন।"
+                    : "অন্য শব্দ দিয়ে খুঁজুন বা অন্য বিভাগ নির্বাচন করুন।"}
                 </p>
               </div>
             )}
@@ -700,12 +925,16 @@ export default function NewsPortal() {
               <span className="text-[0.68rem] font-bold uppercase tracking-[0.14em] text-gold-soft">
                 নিউজলেটার
               </span>
-              <h2 className="mt-2 font-serif text-[1.2rem] font-bold">দিনের খবর থাকুক হাতের মুঠোয়</h2>
+              <h2 className="mt-2 font-serif text-[1.2rem] font-bold">
+                দিনের খবর থাকুক হাতের মুঠোয়
+              </h2>
               <p className="mt-2 text-[0.78rem] leading-relaxed text-white/75">
                 নতুন খবরের আপডেট পেতে ইমেইল দিয়ে সাবস্ক্রাইব করুন।
               </p>
               <form className="mt-4 space-y-2" onSubmit={subscribe}>
-                <label className="sr-only" htmlFor="newsletter-email">ইমেইল ঠিকানা</label>
+                <label className="sr-only" htmlFor="newsletter-email">
+                  ইমেইল ঠিকানা
+                </label>
                 <input
                   className="h-10 w-full rounded-md border border-white/20 bg-white px-3 text-[0.8rem] text-ink outline-none placeholder:text-ink-soft focus:border-gold"
                   id="newsletter-email"
@@ -721,9 +950,18 @@ export default function NewsPortal() {
                   সাবস্ক্রাইব করুন
                 </button>
               </form>
-              <p className="mt-2 text-[0.65rem] text-white/55">ডেমো ফর্ম: সাবস্ক্রিপশনের তথ্য সংরক্ষণ করা হয় না।</p>
+              <p className="mt-2 text-[0.65rem] text-white/55">
+                ডেমো ফর্ম: সাবস্ক্রিপশনের তথ্য সংরক্ষণ করা হয় না।
+              </p>
             </section>
-            <AdCard compact onClick={() => setToast("এটি একটি নমুনা বিজ্ঞাপন—বিজ্ঞাপনদাতার সাইট যুক্ত করা হয়নি।")} />
+            <AdCard
+              compact
+              onClick={() =>
+                setToast(
+                  "এটি একটি নমুনা বিজ্ঞাপন—বিজ্ঞাপনদাতার সাইট যুক্ত করা হয়নি।",
+                )
+              }
+            />
           </aside>
         </div>
       </div>
@@ -731,7 +969,10 @@ export default function NewsPortal() {
       <footer className="border-t border-paper-line bg-white">
         <div className="mx-auto flex max-w-[1180px] flex-wrap justify-between gap-2 px-4 py-5 text-[0.72rem] text-ink-soft sm:px-6">
           <span>© ২০২৬ সংবাদ সকাল · এটি নমুনা সংবাদ পোর্টাল</span>
-          <a className="font-semibold text-maroon no-underline hover:text-ink" href="/">
+          <a
+            className="font-semibold text-maroon no-underline hover:text-ink"
+            href="/"
+          >
             মূল ওয়েবসাইটে ফিরুন
           </a>
         </div>
@@ -755,6 +996,7 @@ export default function NewsPortal() {
           </button>
         </div>
       )}
+      <AutoNewsPopup visible={autoPopup} />
     </div>
   );
 }
