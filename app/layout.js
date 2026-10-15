@@ -29,7 +29,7 @@ export default function RootLayout({ children }) {
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         />
       </head>
-      <body className="flex min-h-screen flex-col overflow-x-hidden bg-paper font-sans text-ink antialiased">
+      <body className="flex min-h-screen flex-col overflow-x-clip bg-paper font-sans text-ink antialiased">
         <SiteContentProvider>
           <Navbar />
           <main className="w-full flex-1">{children}</main>
