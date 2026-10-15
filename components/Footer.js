@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 export default function Footer() {
   const { siteCopy } = useSiteContent();
   const pathname = usePathname();
-  if (pathname.startsWith("/admin")) return null;
+  if (pathname.startsWith("/admin") || pathname === "/news") return null;
 
   return (
     <footer className="bg-ink px-4 py-7 text-center text-[0.85rem] leading-[1.8] text-white/80">
