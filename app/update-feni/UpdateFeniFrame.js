@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import updateFeniResponsiveCss from "./responsiveStyles";
 
 export default function UpdateFeniFrame({
-  src = "/update-feni-source.html?v=20261016-4",
+  src = "/update-feni-source.html?v=20261016-5",
   title = "Update Feni সংবাদ পোর্টাল",
   postRouteBase = "/update-feni/details",
 }) {
