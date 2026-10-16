@@ -52,10 +52,10 @@ export default function UpdateFeniFrame({
       frame.style.height = `${Math.max(
         frameDocument.documentElement.scrollHeight,
         frameDocument.body?.scrollHeight ?? 0,
-        window.innerHeight,
       )}px`;
     };
 
+    frame.style.height = "1px";
     updateHeight();
 
     if (typeof ResizeObserver !== "undefined") {
@@ -74,9 +74,10 @@ export default function UpdateFeniFrame({
 
   return (
     <iframe
-      className="block h-screen w-full border-0"
+      className="block w-full border-0"
       onLoad={resizeFrame}
       src={src}
+      style={{ height: 1 }}
       title={title}
     />
   );
