@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import updateFeniResponsiveCss from "./responsiveStyles";
 
 export default function UpdateFeniFrame({
-  src = "/update-feni-source.html?v=20261016-3",
+  src = "/update-feni-source.html?v=20261016-4",
   title = "Update Feni সংবাদ পোর্টাল",
   postRouteBase = "/update-feni/details",
 }) {
@@ -74,7 +74,7 @@ export default function UpdateFeniFrame({
 
   return (
     <iframe
-      className="block min-h-screen w-full border-0"
+      className="block h-screen w-full border-0"
       onLoad={resizeFrame}
       src={src}
       title={title}

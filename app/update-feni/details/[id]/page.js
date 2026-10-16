@@ -16,7 +16,7 @@ export default async function UpdateFeniPostPage({ params }) {
 
   const src =
     id === "10677"
-      ? "/update-feni-post-source.html?v=20261016-3"
+      ? "/update-feni-post-source.html?v=20261016-4"
       : `/api/update-feni/details/${id}`;
 
   return (
