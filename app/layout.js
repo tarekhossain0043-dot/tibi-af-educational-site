@@ -1,6 +1,7 @@
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import LoadingScreen from "@/components/LoadingScreen";
 import { SiteContentProvider } from "@/components/SiteContentProvider";
 import { LOGO } from "@/lib/data";
 
@@ -31,6 +32,7 @@ export default function RootLayout({ children }) {
       </head>
       <body className="flex h-screen flex-col overflow-x-clip bg-paper font-sans text-ink antialiased">
         <SiteContentProvider>
+          <LoadingScreen />
           <Navbar />
           <main className="w-full flex-1">{children}</main>
           <Footer />
