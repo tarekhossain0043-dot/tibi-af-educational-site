@@ -1,10 +1,29 @@
-import NewsPortal from "@/components/NewsPortal";
+import { notFound } from "next/navigation";
+import UpdateFeniFrame from "../../update-feni/UpdateFeniFrame";
 
-export const metadata = {
-  title: "সংবাদের বিস্তারিত | সংবাদ সকাল",
-  description: "সংবাদ পড়ুন সংবাদ সকালের একক সংবাদ পেজে।",
-};
+export async function generateMetadata({ params }) {
+  const { id } = await params;
 
-export default function NewsArticlePage() {
-  return <NewsPortal />;
+  return {
+    title: `Update Feni | সংবাদ ${id}`,
+    description: "Update Feni-এর বিস্তারিত সংবাদ পড়ুন।",
+  };
+}
+
+export default async function NewsArticlePage({ params }) {
+  const { id } = await params;
+  if (!/^\d+$/.test(id)) notFound();
+
+  const src =
+    id === "10677"
+      ? "/update-feni-post-source.html?v=20261016-3"
+      : `/api/update-feni/details/${id}`;
+
+  return (
+    <UpdateFeniFrame
+      postRouteBase="/news"
+      src={src}
+      title={`Update Feni সংবাদ ${id}`}
+    />
+  );
 }

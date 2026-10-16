@@ -11,7 +11,12 @@ export default function Navbar() {
   const visibleNavLinks = navLinks.some((link) => link.href === "/news")
     ? navLinks
     : [{ href: "/news", label: "সংবাদ" }, ...navLinks];
-  if (pathname.startsWith("/admin")) return null;
+  if (
+    pathname.startsWith("/admin") ||
+    pathname.startsWith("/update-feni") ||
+    pathname.startsWith("/news")
+  )
+    return null;
 
   return (
     <nav className="sticky top-0 z-[100] flex items-center justify-between border-b-2 border-gold bg-ink px-3 py-[9px] sm:px-[18px]">
